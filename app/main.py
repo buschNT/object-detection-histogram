@@ -1,10 +1,11 @@
 import io
-from fastapi import FastAPI, Request, File, UploadFile, Depends
+from fastapi import FastAPI, Request, File, UploadFile, Depends, status
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import base64
 from PIL import Image
+from fastapi.responses import RedirectResponse
 
 from service.object_detection import ObjectDetectionService
 
@@ -30,7 +31,7 @@ async def object_detection_histogram(
         image = Image.open(io.BytesIO(image_bytes))
         image_base64 = base64.b64encode(image_bytes).decode("utf-8")
     except Exception:
-        return {"message": "There was an error uploading the file"}
+        return RedirectResponse(url="/", status_code=status.HTTP_303_SEE_OTHER)
     finally:
         file.file.close()
 
@@ -42,9 +43,7 @@ async def object_detection_histogram(
 
     predictions_context = []
     for prediction in predictions:
-        hist, bin_edges = object_detection_service.get_prediction_histogram(
-            image, prediction
-        )
+        hist, _ = object_detection_service.get_prediction_histogram(image, prediction)
         predictions_context.append(
             {
                 "score": prediction.score,

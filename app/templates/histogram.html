@@ -1,42 +1,47 @@
-<html>
-   <head>
-      <title>Histogram</title>
-      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% extends "base.html" %}
 
-   </head>
-   <body>
-        <h1>Object Detection<h1>
-        <h2>Input Image</h2>
-        <img src="data:image/jpeg;base64,{{ image | safe }}">
+{% block title %}Object Detection - Histogram{% endblock %}
 
-        {% for prediction in predictions %}
-            <div>
-                <h2>Histogram #{{ loop.index }} - Score: {{ prediction.score }}</h2>
-                <canvas id="hist-{{ loop.index }}" width="400" height="100"></canvas>
-                <script>
-                var ctx = document.getElementById('hist-{{ loop.index }}').getContext('2d');
-                var myChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: {{ histogram_bins }},
-                        datasets: [{
-                            label: 'Histogram #1',
-                            data: {{ prediction.hist }},
-                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
-                </script>
-            </div>
-        {% endfor %}
-   </body>
-</html>
+{% block head %}
+    {{ super() }}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+
+<div class="text-center py-10 px-4 sm:px-6 lg:px-8">
+  <h1 class="block text-2xl font-bold text-black sm:text-4xl">Histograms</h1>
+  <p class="mt-3 text-lg text-black">Input image:</p>
+  <img src="data:image/jpeg;base64,{{ image | safe }}">
+</div>
+
+{% for prediction in predictions %}
+<div>
+    <h2>Histogram #{{ loop.index }} - Score: {{ prediction.score }}</h2>
+    <canvas id="hist-{{ loop.index }}" width="400" height="100"></canvas>
+    <script>
+    var ctx = document.getElementById('hist-{{ loop.index }}').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ histogram_bins }},
+            datasets: [{
+                label: 'Histogram #{{ loop.index }}',
+                data: {{ prediction.hist }},
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    </script>
+</div>
+{% endfor %}
+{% endblock %}

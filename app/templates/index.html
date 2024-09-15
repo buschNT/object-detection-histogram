@@ -1,16 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Object Detection</title>
-  </head>
-  <body>
-    <form method="post" action="/object-detection-histogram"  enctype="multipart/form-data">   
-        <label for="file">Choose image to upload</label>
-        <input type="file" id="files" name="file"><br> 
-        <input type="submit" value="Upload">
-     </form>
-  </body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Object Detection{% endblock %}
+
+{% block content %}
+<div class="text-center py-10 px-4 sm:px-6 lg:px-8">
+  <h1 class="block text-2xl font-bold text-black sm:text-4xl">Object Detection</h1>
+  <p class="mt-3 text-lg text-black">Upload an image [jpg] and inspect the gray scale histograms of detected objects with confidence higher 0.75 .</p>
+  <div class="mt-5 flex flex-col justify-center items-center gap-2 sm:flex-row sm:gap-3">
+    <form method="post" action="/object-detection-histogram"  enctype="multipart/form-data">
+      <div class="flex flex-row">
+        <input type="file" id="files" name="file" class="sm:w-auto py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent text-gray-800 focus:outline-none focus:bg-gray-200"><br> 
+        <input type="submit" value="Upload" class="sm:w-auto py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200">
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

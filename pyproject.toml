@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "object-detection-histogram"
+version = "0.1.0"
+description = ""
+authors = ["Christian Busch <chris.busch.22@gmail.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+torch = "^2.4.1"
+torchvision = "^0.19.1"
+numpy = "^2.1.1"
+opencv-python = "^4.10.0.84"
+matplotlib = "^3.9.2"
+fastapi = {extras = ["standard"], version = "^0.114.2"}
+jinja2 = "^3.1.4"
+pydantic = "^2.9.1"
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.6.5"
+
+
+[[tool.poetry.source]]
+name = "pytorch_cpu"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "explicit"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

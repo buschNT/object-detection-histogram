@@ -9,7 +9,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=off \
     PIP_DISABLE_PIP_VERSION_CHECK=on \
-    PIP_DEFAULT_TIMEOUT=100 \
+    PIP_DEFAULT_TIMEOUT=200 \
     POETRY_NO_INTERACTION=1 \
     POETRY_VIRTUALENVS_CREATE=0 \
     POETRY_CACHE_DIR='/var/cache/pypoetry' \
@@ -23,10 +23,15 @@ RUN python3 -m venv $VENV_PATH \
 WORKDIR /app
 
 COPY pyproject.toml poetry.lock /app/
-RUN $VENV_PATH/bin/poetry install --no-dev --no-interaction --no-ansi
+RUN $VENV_PATH/bin/poetry install --only main --no-interaction --no-ansi
 
 
 FROM python:3.12-slim
+
+RUN apt-get update && apt-get upgrade -y \
+    && apt-get install --no-install-recommends -y \
+        ffmpeg libsm6 libxext6 \
+    && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 ENV PYTHONFAULTHANDLER=1 \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -37,10 +42,7 @@ COPY --from=builder /usr/local/lib/python3.12/site-packages/ /usr/local/lib/pyth
 COPY --from=builder /usr/local/bin /usr/local/bin
 
 WORKDIR /app
-COPY ./ ./
-
-RUN adduser --system --no-create-home user && chown -R user /app
-USER user
+COPY ./app ./
 
 EXPOSE 8000
 

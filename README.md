@@ -17,7 +17,7 @@ Access the app in your local browser [http://0.0.0.0:8000](http://0.0.0.0:8000) 
 
 ## Develop using Virtual Environment
 
-Create a virtual environment and active it afterwards (activation depends on):
+Create a virtual environment and active it afterwards (activation depends on OS):
 
 ```bash
 python3.12 -m venv .venv
